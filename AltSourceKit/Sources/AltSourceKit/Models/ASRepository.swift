@@ -88,7 +88,7 @@ public struct ASRepository: Sendable, Decodable, Hashable, Identifiable {
 				domain: "FeatherSources",
 				code: 44521,
 				userInfo: [
-					NSLocalizedDescriptionKey: "This source does not contain any apps."
+					NSLocalizedDescriptionKey: NSLocalizedString("This source does not contain any apps.", comment: "")
 				]
 			)
 		}
@@ -299,7 +299,13 @@ extension ASRepository {
 			{
 				throw NSError(
 					domain: "FeatherSources",
-					code: 112789, userInfo: [NSLocalizedDescriptionKey: "AltStore PAL repositories aren't supported: \(id ?? "")"]
+					code: 112789,
+					userInfo: [
+						NSLocalizedDescriptionKey: String(
+							format: NSLocalizedString("AltStore PAL repositories aren't supported: %@", comment: ""),
+							id ?? ""
+						)
+					]
 				)
 			}
 		}

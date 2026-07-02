@@ -182,6 +182,7 @@
 				id,
 				pl,
 				it,
+				ja,
 				"zh-Hans",
 			);
 			mainGroup = 3379C1B02DA869A1004372DA;

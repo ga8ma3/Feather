@@ -1,0 +1,47 @@
+name: Hoshino Build IPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: "true"
+
+      - name: Select Xcode
+        shell: bash
+        run: |
+          set -euo pipefail
+          for candidate in \
+            /Applications/Xcode_26.3.0.app \
+            /Applications/Xcode_26.2.0.app \
+            /Applications/Xcode_26.1.0.app \
+            /Applications/Xcode_26.0.0.app \
+            /Applications/Xcode.app
+          do
+            if [ -d "$candidate" ]; then
+              sudo xcode-select -s "$candidate"
+              break
+            fi
+          done
+          xcodebuild -version
+
+      - name: Ensure build tools
+        run: |
+          if ! command -v jq >/dev/null 2>&1; then
+            brew install jq
+          fi
+
+      - name: Build iOS IPA
+        run: make iphoneos
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Feather-japanese-unsigned-ipa
+          path: packages/Feather.ipa
+          if-no-files-found: error
